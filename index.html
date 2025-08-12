@@ -4,117 +4,108 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Little Moments Generator</title>
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="manifest" href="manifest.json" />
+
+  <!-- PWA / Icons -->
+  <link rel="manifest" href="manifest.json?v=3" />
+  <link rel="apple-touch-icon" href="icon-512.png?v=3">
   <meta name="theme-color" content="#699eb0" />
+
   <style>
-    body {
-      background: #fffcf5;
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      padding: 2rem;
-      color: #333;
+    :root{
+      --cream:#fffcf5; --ink:#333; --brand:#699eb0; --brand-2:#88b6c8;
+      --card:#ffffff; --muted:#777; --dash:#699eb0;
+      --shadow:0 6px 24px rgba(0,0,0,.08); --radius:16px;
     }
-    .logo {
-      max-width: 150px;
-      margin-bottom: 1rem;
+    *{box-sizing:border-box}
+    body{
+      background:var(--cream);
+      font-family:'Poppins',sans-serif;
+      text-align:center;
+      padding:2rem;
+      color:var(--ink);
+      margin:0;
     }
-    h1 {
-      color: #699eb0;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      font-size: 1.6rem;
+    .logo{ max-width:150px; margin-bottom:1rem; }
+    h1{ color:var(--brand); margin-bottom:.5rem; font-weight:600; font-size:1.6rem; }
+    #prompt{
+      margin:2rem auto; font-size:1.25rem; padding:1.5rem;
+      background:rgba(255,255,255,.95); border-radius:16px;
+      border:2px dashed var(--dash); max-width:90%; min-height:120px; backdrop-filter:blur(6px);
     }
-    #prompt {
-      margin: 2rem auto;
-      font-size: 1.25rem;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 16px;
-      border: 2px dashed #699eb0;
-      max-width: 90%;
-      min-height: 120px;
-      backdrop-filter: blur(6px);
+    button{
+      background-color:var(--brand); color:#fff; border:0; padding:1rem 2rem;
+      border-radius:30px; font-size:1.1rem; cursor:pointer; margin-top:1rem; font-weight:600;
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
     }
-    button {
-      background-color: #699eb0;
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-top: 1rem;
-      font-weight: 600;
+    button:hover{ background-color:var(--brand-2); }
+    .cover{ margin-top:2rem; width:250px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,.1); }
+    footer{ font-size:.9rem; color:var(--muted); margin-top:3rem; max-width:90%; margin-left:auto; margin-right:auto; }
+
+    /* One-time overlay */
+    #ackOverlay{
+      position:fixed; inset:0; background:rgba(255,252,245,.98);
+      display:grid; place-items:center; z-index:9999; opacity:1; transition:opacity .35s ease;
     }
-    button:hover {
-      background-color: #88b6c8;
+    #ackCard{
+      width:min(560px,92%); background:#fff; border-radius:20px; box-shadow:var(--shadow);
+      padding:22px; text-align:left;
     }
-    .cover {
-      margin-top: 2rem;
-      width: 250px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    #gate, #generator {
-      display: none;
-    }
-    #gate {
-      display: block;
-      max-width: 400px;
-      margin: 0 auto;
-      margin-top: 4rem;
-    }
-    input[type="password"] {
-      padding: 0.75rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      width: 80%;
-      max-width: 300px;
-      margin-bottom: 1rem;
-    }
-    .hint {
-      font-size: 0.85rem;
-      color: #999;
-      margin-top: 0.5rem;
-    }
+    #ackCard h2{ margin:0 0 8px; color:#699eb0; font-size:20px; }
+    #ackCard p{ margin:6px 0; color:#5a6b75; }
+    #ackBtn{ margin-top:12px; background:#699eb0; color:#fff; border:0; padding:12px 14px; border-radius:14px; font-weight:700; cursor:pointer; }
+    #ackBtn[disabled]{ opacity:.5; cursor:not-allowed; }
   </style>
 </head>
 <body>
-  <div id="gate">
-    <h2>Private Access</h2>
-    <p>This page is for Little Moments purchasers only.<br> Please enter the password to continue.</p>
-    <input type="password" id="passwordInput" placeholder="Enter password..." />
-    <br>
-    <button onclick="checkPassword()">Submit</button>
-    <div class="hint">(Hint: It's in your receipt email!)</div>
-  </div>
 
+  <!-- One-time acknowledgement overlay -->
+  <section id="ackOverlay" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+    <div id="ackCard">
+      <h2 id="ackTitle">Thanks for supporting this work 💛</h2>
+      <p>This app is for personal use only by those who’ve purchased from <strong>Playful Heart Parenting</strong>. Please don’t share this link publicly.</p>
+      <label style="display:flex;gap:10px;align-items:center;margin-top:12px;">
+        <input id="ackCheck" type="checkbox"> <span>I understand.</span>
+      </label>
+      <button id="ackBtn" disabled>Let’s play!</button>
+      <div id="ackMsg" style="margin-top:8px;color:#b24627;font-size:13px;"></div>
+    </div>
+  </section>
+
+  <!-- App UI -->
   <div id="generator">
     <img src="https://dl.dropboxusercontent.com/scl/fi/8fk2krt7urgqbggr9auxn/PHP-LOGO-tb.png?rlkey=b0ckqoxsmquyza0wwy55k5rbe&st=mtkzjcb0&raw=1" alt="Playful Heart Parenting Logo" class="logo" />
     <h1>Little Moments for Big Laughs: Playful Moment Generator</h1>
     <button onclick="generatePrompt()">Get a Moment</button>
     <div id="prompt">Tap the button to get a moment of play!</div>
     <img src="https://dl.dropboxusercontent.com/scl/fi/mra3nj61mjppj7k4bep1t/LMFBL-new-cover.jpg?rlkey=oe95rmwhlx7lw830ehvjilwjd&st=jj9yb3j7&raw=1" alt="Little Moments for Big Laughs Cover" class="cover" />
-    <p style="font-size: 0.9rem; color: #777; margin-top: 3rem; max-width: 90%; margin-left: auto; margin-right: auto;">
+    <footer>
       © 2025 Mia Wisinski, Playful Heart Parenting. This generator is for personal use only by those who have purchased <em>Little Moments for Big Laughs</em>. Please do not share this link publicly or distribute without explicit permission.
-    </p>
+    </footer>
   </div>
 
   <script>
-    const password = "moments";
-
-    function checkPassword() {
-      const userInput = document.getElementById("passwordInput").value;
-      if (userInput.trim().toLowerCase() === password) {
-        document.getElementById("gate").style.display = "none";
-        document.getElementById("generator").style.display = "block";
-      } else {
-        alert("Incorrect password. Please try again.");
+    /* One-time acknowledgement logic */
+    (function initAck(){
+      const overlay = document.getElementById('ackOverlay');
+      const btn = document.getElementById('ackBtn');
+      const chk = document.getElementById('ackCheck');
+      if (localStorage.getItem('lm_ack') === 'yes') {
+        overlay.style.display = 'none';
+        return;
       }
-    }
+      chk.addEventListener('change', ()=>{ btn.disabled = !chk.checked; });
+      btn.addEventListener('click', ()=>{
+        if (!chk.checked) return;
+        localStorage.setItem('lm_ack','yes');
+        overlay.style.opacity = '0';
+        setTimeout(()=>{ overlay.style.display = 'none'; }, 350);
+      });
+    })();
 
+    /* Prompts (all 147) */
     const prompts = [
   "1. Challenge your child to a “tongue twister-off” — here are two classics: “Red leather, yellow leather” and “Unique New York” — try to say each one five times, fast!",
   "2. Challenge your kiddo to a 15-second thumb war, but act weak, wimpy, and flabbergasted by their thumb strength!",
@@ -126,105 +117,106 @@
   "8. Challenge your child to a fast-stomping or hopping contest — use a stopwatch and see how many stomps you can each do in 30 seconds. Count out loud for each other.",
   "9. Challenge your child to let out all their air and then try to laugh. The result is hilarious. Of course it’s more fun if you join in!",
   "10. Challenge your kids to a contest where you try to sneakily stick stickers on each other without noticing throughout the day. Whoever snuck the most by the end of the day wins!",
-"11. Challenge them to an arm wrestle and lose dramatically.", 
-"12. Do a try-not-to-laugh challenge where you get really close to each other and say, “Meoowwww” or whatever random thing you want, trying to make each other laugh while keeping a serious face.", 
-"13. Use a dish towel (or even just your hand) to hold up and down in front of your face and “magically” change your facial expressions each time you lower it.", 
-"14. Challenge your kiddo to a spontaneous “staring contest” and stare as intensely as possible.", 
-"15. Draw a fake mustache (with eyeliner or using sharpie and tape) and see how long it takes your kids to notice. Pop out and say, “I mustache you a question!”", 
-"16. Tape the tip of your nose to your forehead to make it point upward. Bonus points for snorting like a pig when they notice, just to be silly!", 
-"17. Pop out from around the corner and make a random silly face just to surprise them.", 
-"18. Hand your child an imaginary “silly face remote” and ask them to change your face. Let them point it at you as you make different silly faces and offer to take turns!", 
-"19. Hang upside down over the front of the couch and put sunglasses or glasses on your chin to turn it into a “face.” Add two little dots for eyes if you want! Extra points if you sing a song and sneak the word “chin” into the lyrics.", 
-"20. Randomly make an “I’m gonna get you!” face and chase after them (if it seems welcome)!", 
-"21. Try really hard to touch your tongue to your nose and ask if they think they can!", 
-"22. Ask, “Does this look a little fishy to you?” and make a “fish face” with your lips.", 
-"23. Pretend you’re a robot whose batteries are dying and beg your kids to plug you back in or change your battery — talk in robot voice, of course!", 
-"24. Do your best “villain laugh” out of nowhere and then ask if they think you’d make a good Disney villain voice. Challenge them to do a laugh, too.", 
-"25. Have your feet strike up a conversation with each other. Pretend they’re scared of your child.",
-"26. Walk into the room like a model on the runway, walking towards your kids, stopping, posing, then walking back out with a serious face. Bonus points for throwing on something ridiculous.",
-"27. Say, “How do you DO?” in an exaggerated, “proper-sounding” voice when your child walks into the room.", 
-"28. Strike a superhero-esque pose and ask, “If I were a superhero, do you think this would be a good pose for me?”", 
-"29. When you walk into the room, cover your face and say, “Please, no pictures, no autographs… I know I’m famous, but why must the paparazzi follow me EVERYWHERE!?”", 
-"30. Use a news anchor voice to narrate something ordinary happening. Example: “And we’re LIVE in the Smith household where Charlotte is about to take her first bite of a sandwich!! Charlotte, what’s going through your mind right now?” Make sure to hold up an invisible microphone.",
-"31. Use an auctioneer voice when offering snacks. Example: “Okay, ladies and gentlemen, boys and girls, what do we have here? We’ve got a delicious apple! Going once, going twice, SOLD to the little one in the front!”", 
-"32. When they’re getting ready for the day, act like a sports commentator narrating and rating what they’re doing. Example: “And now Benny’s putting his right foot in the shoe, look at that perfect placement, that skill. The judges are definitely gonna give him a 10 for this.”", 
-"33. When you’re about to help brush or style hair, say, “Welcome to my salon! Have you been here before? You look so familiar!”", 
-"34. Pretend your child has suddenly gone invisible and say, “Where did you go?! Did you turn on your invisibility power again??” Swipe at the air around them, missing them on purpose, getting really confused and scared, especially if they touch you or make a noise.", 
-"35. Pretend your kid’s foot is a phone ringing. Go to answer it and get angry at a telemarketer or pretend to be ordering a pizza. Get a call on the “other line” and use the other foot to be talking on two phones at once.", 
-"36. Pretend to text a friend using your child’s foot as a phone.", 
-"37. Ask them a silly small-talk question like, “So what do you do for work?” Act surprised if they say, “I’m a kid!!”", 
-"38. Pretend to fall asleep standing up, mid-sentence. Bonus points for snoring.", 
-"39. Address your child as royalty, bowing or curtsying and calling them, “Your highness” or “Your majesty!”", 
-"40. Pretend to forget how to get to the bathroom in your own house and ask your child for very detailed instructions, but keep “getting lost.” Jump up and down, crying that you gotta go NOW!", 
-"41. When you accidentally drop something or bump into something pretend to be the voice for that thing. For example, “Hey! Watch where you’re goin!” in a silly voice for the “wall.” Bonus points for acting confused and having a fake conversation with it.", 
-"42. Blow up a balloon then let it go flying around the room and say, “Excuse ME!”", 
-"43. Try to perfect your “armpit fart” (cup your hand under your armpit, press your arm down to trap air, then quickly move your arm up and down to make the sound)!", 
-"44. Simply make a loud, silly toot noise with your mouth when you squat down, jump, or do any movement.", 
-"45. Have a contest to see who can make the most believable toot sound. Tip: blowing a raspberry on the inside of your elbow usually produces a good one!", "46. If the ketchup/shampoo/whatever bottle makes a loud noise exclaim, “WHEW! Pardon ME!! Pee-yeww!”", 
-"47. Play “I sleep, you fart,” where you simply pretend to be asleep and they get to wake you up with a loud fart noise and you have a big, silly, dramatic reaction. Then trade roles. Sounds simple, but this is genuinely hilarious. (Fun fact: my son invented this game when he was two)!", 
-"48. Hum some original theme music for either yourself when you enter the room (or for your child when they enter the room)! Think Kronk from Emperor’s New Groove.", 
-"49. Sing everyday phrases in an operatic voice like, “Good mooooooorning!”", 
-"50. When asking your child what they want for a snack, channel the Spice Girls and bust into “Tell me what you want, what you really really want!”", 
-"51. Shout “WHOOMP! There it is!” (a la Tag Team) when you find something you’ve been looking for.", 
-"52. Tap a rhythm with your hands on a random item and ask them to guess what song you’re thinking of.", 
-"53. Insert mild potty humor or silly random words into a familiar song.", 
-"54. Attempt to start moonwalking out of the blue.", 
-"55. Start doing “the robot” dance out of nowhere.", 
-"56. Announce that it’s time to floss in a serious tone, but then start doing the “floss” — as in the dance move – not flossing your teeth!", 
-"57. Say, “Walk this way!” Then do a silly dancing walk, march, hop, etc.", 
-"58. When the microwave or oven beeps, strike a different dramatic pose with each beep.", 
-"59. Start disco dancing with no music. Say, “What? Haven’t you ever heard of a silent disco?” Bonus points for playfully challenging your kiddo to a disco dance-off (music optional)!", 
-"60. Start dancing to the ringtone when the phone rings and pretend to be really into it like it’s the best song you’ve ever heard. Bonus points for saying, “What is this song? It slaps!!” or whatever the cool kids are saying these days.", 
-"61. Tape a piece of paper with \"Hug Me\" written on it to your own back.", 
-"62. Ask your child for a high five and have a big, dramatic reaction to the force, exclaiming how strong they are, shaking off your hand.", 
-"63. Ask, “What if I hugged you like this?” and give the strangest, silliest hug. OR: “What if I smiled / laughed / shook hands like this?”", 
-"64. Say, “Quick! What am I?!” Then strike a pose as something random (ice cream cone, elephant, etc.)", 
-"65. Give your child a high-five but hold up two fingers and say, “High-TWO!”", 
-"66. Hold out your fist for a “knuckles” bump, but at the last second, switch to two fingers and say, “Snail!” Or make up your own goofy twist!", 
-"67. Start moving in slow motion, speak in a low, slow voice, and say, “Heyyy, who pressed the slow-mo button on my remooooote??” (Go with it if they pretend to press “fast-forward” or “rewind!”)", 
-"68. Act like you’re trapped behind an invisible wall (like a mime) and say, “Hey! Who put this invisible wall here?!”", 
-"69. Amuse yourself by crying, “I’ve fallen and I can’t get up!!” in a frail little voice and begging them to carry you.", 
-"70. Freeze your body and face, then say through clenched teeth, “Hey! Who pressed the pause button? I’m stuck!! Can someone please press play??”", 
-"71. Proudly brag that you can “stand on one finger!” To prove it, crouch down, put your finger on the ground and place your foot on top.", 
-"72. Subtly smush a bite of brownie over your teeth and wait for the opportunity to smile — act clueless.", 
-"73. Try to balance a spoon on your nose at dinner — or between your upper lip and nose (like a mustache!) by making kissy lips.", 
-"74. Hold a banana up to your ear like a phone and answer it very seriously.", 
-"75. Before taking a bite of your food, hold it up to your ear and pretend it’s whispering something to you, then apologize to it that you’re about to eat it.", 
-"76. Pretend to be a cooking show host, taking a bite of food with an exaggerated reaction. Hold a contest to see who can be the most convincing in showing how delicious their food is.", 
-"77. Stomp over to your food/snack with big, slow “giant” stomps and say, “Fee, fi, fo, fum… I’m going to eat you — YUM!” just for fun.", 
-"78. When preparing food, sing, “That’s the way (uh-huh, uh-huh) I like it! (uh- huh, uh-huh!)”", 
-"79. Grab a spatula as your “microphone” and launch into your go- to karaoke song, really getting into it. Bonus points for somehow working the word “spatula” in there!", 
-"80. Welcome your children into your “restaurant,” giving it a random silly name and weird restaurant policies like, “Sorry, we don’t allow smiling in our restaurant!”", 
-"81. Make up a silly, short, simple chant/rap about whatever you’re about to eat.", 
-"82. Transform your hand into a “goose beak” and start honking and playfully pecking around. Say, “Hey, who let this silly goose loose in our house?!” Start “pecking” yourself and pretend to be furious.", 
-"83. Put a glove on your head and pretend to be a rooster, shouting, “Cock-a-doodle-doo!” to get everyone energized in the morning.", 
-"84. Say, “Can you please hold this invisible penguin for me? Thanks!” Then pretend to carefully hand them a penguin.", 
-"85. Slowly stand on one leg, tuck your arms into your sides, look confused, then say, “Oh no, I forgot to take my anti-flamingo medicine and I’m turning into a flamingo!” Take some invisible medicine to “make it stop.”", 
-"86. Arch your back, hold up your arms by your chest like a T-Rex, and try to drink a glass of water. Say, “Wow, I’m really glad I’m not a T-Rex… this is really hard!”", 
-"87. Start waddling and quacking like a duck out of the blue, and invite your little “duckling” to follow along. Bonus points for continuing to randomly quack throughout the day.", 
-"88. Bawk like a chicken each time you try to talk and act surprised and confused.", 
-"89. Pick up one of your child’s stuffed animals and pretend they’re whispering an exciting story into your ear. Respond with things like, “No WAY. The teddy bear said THAT? Well what did you tell her?!”", 
-"90. Shove a stuffed animal under your shirt and say “Oh, no… I’ve got a tummy ache. I really shouldn’t have eaten that alligator/panda/whatever it is!”", 
-"91. Challenge each other to do your best “whale voice” (like Dory from Finding Nemo).", 
-"92. Let your kids choose any animal and try to make random puns related to that animal throughout the day. Creativity challenge! Example: If they pick “cow,” you can say, “So. Anyone seen any good mooooovies lately?”", 
-"93. Do a “crab walk” (Sit, lift hips, walk sideways on hands and feet) and say, “I can’t help it... I’m just feelin’ really CRABBY today!” (This can be a playful way to get out of a funk if you actually are feeling crabby)!", 
-"94. Come into the room with socks on your ears and say, “What? My ears were cold!”", 
-"95. Ball up a pair of socks and shout, “Hot socks!!” Throw the sock ball back and forth like in “hot potato.”", 
-"96. Use a rolling pin to try to gently “de- wrinkle” your child’s outfit (while they’re wearing it).", 
-"97. When you put on your shoes, start shuffling your feet around and say, “Oh no… did someone cast a magic shuffling spell on my shoes? They won’t stop shuffling!”", 
-"98. Tuck a scarf or shirt into the waistband of your pants in the back and pretend to be astonished/concerned that you’ve grown a tail!", 
-"99. Put a hooded sweatshirt on backwards and pull the hood up over your face, exclaiming, “Hey! What’s going on? Are we having a solar eclipse? Who turned out the lights?”", 
-"100. Try to balance a hat on your bum and ask them if they think that’s a good fashion choice and if it might start a trend.", 
-"101. Write a fake name tag for yourself using a post-it note or piece of paper and tape that says “Hi, my name is _______” — insert something silly like a ridiculous nickname, made-up funny word, or something from a family inside joke. Put it on your shirt and wait for everyone to notice.", 
-"102. Clap wildly and cheer for your child when they enter the room, just because you’re excited to see them.", 
-"103. When cuddling/hugging, exclaim, “You’ll never escape from this cuddle, NEVER!” When they escape, keep your eyes closed and pretend to keep cuddling them, then open your eyes and be flabbergasted that they actually escaped!",  
-"104. Start speaking in rhymes like, “Oh no… I think I have rhyme-itis… your highness!!”", 
-"105. Use an imaginary “lasso” or “fishing pole” to try and “catch” your kiddos and draw them in for a hug! Of course, this can only be done if they think it’s fun and are eager participants.", 
-"106. Do the “raise the roof” move and chant “Whoop, whoop!!” to greet them.", 
-"107. Make up mushy-gushy names for your kids, like, “I love you, my little schnookie-pookie-wookie-doodly-ding- dong-bear!” See if they can come up with an even more ridiculous one!", 
-"108. Spontaneously start listing some of your favorite things about your child — but keep it silly and lighthearted like, “One of my favorite things about you is you admit it when you toot!” Of course, you can sprinkle in some heartfelt, non- silly things too.", 
-"109. Give them a round of applause for doing a great job on something but say, “Clapping with my hands isn’t enough. I’m so proud of you I have to clap with my FEET, too!”", 
-"110. Come up with a secret handshake with your child with silly sound effects. Challenge yourselves to remember it the next day… and the next…",
+  "11. Challenge them to an arm wrestle and lose dramatically.",
+  "12. Do a try-not-to-laugh challenge where you get really close to each other and say, “Meoowwww” or whatever random thing you want, trying to make each other laugh while keeping a serious face.",
+  "13. Use a dish towel (or even just your hand) to hold up and down in front of your face and “magically” change your facial expressions each time you lower it.",
+  "14. Challenge your kiddo to a spontaneous “staring contest” and stare as intensely as possible.",
+  "15. Draw a fake mustache (with eyeliner or using sharpie and tape) and see how long it takes your kids to notice. Pop out and say, “I mustache you a question!”",
+  "16. Tape the tip of your nose to your forehead to make it point upward. Bonus points for snorting like a pig when they notice, just to be silly!",
+  "17. Pop out from around the corner and make a random silly face just to surprise them.",
+  "18. Hand your child an imaginary “silly face remote” and ask them to change your face. Let them point it at you as you make different silly faces and offer to take turns!",
+  "19. Hang upside down over the front of the couch and put sunglasses or glasses on your chin to turn it into a “face.” Add two little dots for eyes if you want! Extra points if you sing a song and sneak the word “chin” into the lyrics.",
+  "20. Randomly make an “I’m gonna get you!” face and chase after them (if it seems welcome)!",
+  "21. Try really hard to touch your tongue to your nose and ask if they think they can!",
+  "22. Ask, “Does this look a little fishy to you?” and make a “fish face” with your lips.",
+  "23. Pretend you’re a robot whose batteries are dying and beg your kids to plug you back in or change your battery — talk in robot voice, of course!",
+  "24. Do your best “villain laugh” out of nowhere and then ask if they think you’d make a good Disney villain voice. Challenge them to do a laugh, too.",
+  "25. Have your feet strike up a conversation with each other. Pretend they’re scared of your child.",
+  "26. Walk into the room like a model on the runway, walking towards your kids, stopping, posing, then walking back out with a serious face. Bonus points for throwing on something ridiculous.",
+  "27. Say, “How do you DO?” in an exaggerated, “proper-sounding” voice when your child walks into the room.",
+  "28. Strike a superhero-esque pose and ask, “If I were a superhero, do you think this would be a good pose for me?”",
+  "29. When you walk into the room, cover your face and say, “Please, no pictures, no autographs… I know I’m famous, but why must the paparazzi follow me EVERYWHERE!?”",
+  "30. Use a news anchor voice to narrate something ordinary happening. Example: “And we’re LIVE in the Smith household where Charlotte is about to take her first bite of a sandwich!! Charlotte, what’s going through your mind right now?” Make sure to hold up an invisible microphone.",
+  "31. Use an auctioneer voice when offering snacks. Example: “Okay, ladies and gentlemen, boys and girls, what do we have here? We’ve got a delicious apple! Going once, going twice, SOLD to the little one in the front!”",
+  "32. When they’re getting ready for the day, act like a sports commentator narrating and rating what they’re doing. Example: “And now Benny’s putting his right foot in the shoe, look at that perfect placement, that skill. The judges are definitely gonna give him a 10 for this.”",
+  "33. When you’re about to help brush or style hair, say, “Welcome to my salon! Have you been here before? You look so familiar!”",
+  "34. Pretend your child has suddenly gone invisible and say, “Where did you go?! Did you turn on your invisibility power again??” Swipe at the air around them, missing them on purpose, getting really confused and scared, especially if they touch you or make a noise.",
+  "35. Pretend your kid’s foot is a phone ringing. Go to answer it and get angry at a telemarketer or pretend to be ordering a pizza. Get a call on the “other line” and use the other foot to be talking on two phones at once.",
+  "36. Pretend to text a friend using your child’s foot as a phone.",
+  "37. Ask them a silly small-talk question like, “So what do you do for work?” Act surprised if they say, “I’m a kid!!”",
+  "38. Pretend to fall asleep standing up, mid-sentence. Bonus points for snoring.",
+  "39. Address your child as royalty, bowing or curtsying and calling them, “Your highness” or “Your majesty!”",
+  "40. Pretend to forget how to get to the bathroom in your own house and ask your child for very detailed instructions, but keep “getting lost.” Jump up and down, crying that you gotta go NOW!",
+  "41. When you accidentally drop something or bump into something pretend to be the voice for that thing. For example, “Hey! Watch where you’re goin!” in a silly voice for the “wall.” Bonus points for acting confused and having a fake conversation with it.",
+  "42. Blow up a balloon then let it go flying around the room and say, “Excuse ME!”",
+  "43. Try to perfect your “armpit fart” (cup your hand under your armpit, press your arm down to trap air, then quickly move your arm up and down to make the sound)!",
+  "44. Simply make a loud, silly toot noise with your mouth when you squat down, jump, or do any movement.",
+  "45. Have a contest to see who can make the most believable toot sound. Tip: blowing a raspberry on the inside of your elbow usually produces a good one!",
+  "46. If the ketchup/shampoo/whatever bottle makes a loud noise exclaim, “WHEW! Pardon ME!! Pee-yeww!”",
+  "47. Play “I sleep, you fart,” where you simply pretend to be asleep and they get to wake you up with a loud fart noise and you have a big, silly, dramatic reaction. Then trade roles. Sounds simple, but this is genuinely hilarious. (Fun fact: my son invented this game when he was two)!",
+  "48. Hum some original theme music for either yourself when you enter the room (or for your child when they enter the room)! Think Kronk from Emperor’s New Groove.",
+  "49. Sing everyday phrases in an operatic voice like, “Good mooooooorning!”",
+  "50. When asking your child what they want for a snack, channel the Spice Girls and bust into “Tell me what you want, what you really really want!”",
+  "51. Shout “WHOOMP! There it is!” (a la Tag Team) when you find something you’ve been looking for.",
+  "52. Tap a rhythm with your hands on a random item and ask them to guess what song you’re thinking of.",
+  "53. Insert mild potty humor or silly random words into a familiar song.",
+  "54. Attempt to start moonwalking out of the blue.",
+  "55. Start doing “the robot” dance out of nowhere.",
+  "56. Announce that it’s time to floss in a serious tone, but then start doing the “floss” — as in the dance move – not flossing your teeth!",
+  "57. Say, “Walk this way!” Then do a silly dancing walk, march, hop, etc.",
+  "58. When the microwave or oven beeps, strike a different dramatic pose with each beep.",
+  "59. Start disco dancing with no music. Say, “What? Haven’t you ever heard of a silent disco?” Bonus points for playfully challenging your kiddo to a disco dance-off (music optional)!",
+  "60. Start dancing to the ringtone when the phone rings and pretend to be really into it like it’s the best song you’ve ever heard. Bonus points for saying, “What is this song? It slaps!!” or whatever the cool kids are saying these days.",
+  "61. Tape a piece of paper with \"Hug Me\" written on it to your own back.",
+  "62. Ask your child for a high five and have a big, dramatic reaction to the force, exclaiming how strong they are, shaking off your hand.",
+  "63. Ask, “What if I hugged you like this?” and give the strangest, silliest hug. OR: “What if I smiled / laughed / shook hands like this?”",
+  "64. Say, “Quick! What am I?!” Then strike a pose as something random (ice cream cone, elephant, etc.)",
+  "65. Give your child a high-five but hold up two fingers and say, “High-TWO!”",
+  "66. Hold out your fist for a “knuckles” bump, but at the last second, switch to two fingers and say, “Snail!” Or make up your own goofy twist!",
+  "67. Start moving in slow motion, speak in a low, slow voice, and say, “Heyyy, who pressed the slow-mo button on my remooooote??” (Go with it if they pretend to press “fast-forward” or “rewind!”)",
+  "68. Act like you’re trapped behind an invisible wall (like a mime) and say, “Hey! Who put this invisible wall here?!”",
+  "69. Amuse yourself by crying, “I’ve fallen and I can’t get up!!” in a frail little voice and begging them to carry you.",
+  "70. Freeze your body and face, then say through clenched teeth, “Hey! Who pressed the pause button? I’m stuck!! Can someone please press play??”",
+  "71. Proudly brag that you can “stand on one finger!” To prove it, crouch down, put your finger on the ground and place your foot on top.",
+  "72. Subtly smush a bite of brownie over your teeth and wait for the opportunity to smile — act clueless.",
+  "73. Try to balance a spoon on your nose at dinner — or between your upper lip and nose (like a mustache!) by making kissy lips.",
+  "74. Hold a banana up to your ear like a phone and answer it very seriously.",
+  "75. Before taking a bite of your food, hold it up to your ear and pretend it’s whispering something to you, then apologize to it that you’re about to eat it.",
+  "76. Pretend to be a cooking show host, taking a bite of food with an exaggerated reaction. Hold a contest to see who can be the most convincing in showing how delicious their food is.",
+  "77. Stomp over to your food/snack with big, slow “giant” stomps and say, “Fee, fi, fo, fum… I’m going to eat you — YUM!” just for fun.",
+  "78. When preparing food, sing, “That’s the way (uh-huh, uh-huh) I like it! (uh- huh, uh-huh!)”",
+  "79. Grab a spatula as your “microphone” and launch into your go- to karaoke song, really getting into it. Bonus points for somehow working the word “spatula” in there!",
+  "80. Welcome your children into your “restaurant,” giving it a random silly name and weird restaurant policies like, “Sorry, we don’t allow smiling in our restaurant!”",
+  "81. Make up a silly, short, simple chant/rap about whatever you’re about to eat.",
+  "82. Transform your hand into a “goose beak” and start honking and playfully pecking around. Say, “Hey, who let this silly goose loose in our house?!” Start “pecking” yourself and pretend to be furious.",
+  "83. Put a glove on your head and pretend to be a rooster, shouting, “Cock-a-doodle-doo!” to get everyone energized in the morning.",
+  "84. Say, “Can you please hold this invisible penguin for me? Thanks!” Then pretend to carefully hand them a penguin.",
+  "85. Slowly stand on one leg, tuck your arms into your sides, look confused, then say, “Oh no, I forgot to take my anti-flamingo medicine and I’m turning into a flamingo!” Take some invisible medicine to “make it stop.”",
+  "86. Arch your back, hold up your arms by your chest like a T-Rex, and try to drink a glass of water. Say, “Wow, I’m really glad I’m not a T-Rex… this is really hard!”",
+  "87. Start waddling and quacking like a duck out of the blue, and invite your little “duckling” to follow along. Bonus points for continuing to randomly quack throughout the day.",
+  "88. Bawk like a chicken each time you try to talk and act surprised and confused.",
+  "89. Pick up one of your child’s stuffed animals and pretend they’re whispering an exciting story into your ear. Respond with things like, “No WAY. The teddy bear said THAT? Well what did you tell her?!”",
+  "90. Shove a stuffed animal under your shirt and say “Oh, no… I’ve got a tummy ache. I really shouldn’t have eaten that alligator/panda/whatever it is!”",
+  "91. Challenge each other to do your best “whale voice” (like Dory from Finding Nemo).",
+  "92. Let your kids choose any animal and try to make random puns related to that animal throughout the day. Creativity challenge! Example: If they pick “cow,” you can say, “So. Anyone seen any good mooooovies lately?”",
+  "93. Do a “crab walk” (Sit, lift hips, walk sideways on hands and feet) and say, “I can’t help it... I’m just feelin’ really CRABBY today!” (This can be a playful way to get out of a funk if you actually are feeling crabby)!",
+  "94. Come into the room with socks on your ears and say, “What? My ears were cold!”",
+  "95. Ball up a pair of socks and shout, “Hot socks!!” Throw the sock ball back and forth like in “hot potato.”",
+  "96. Use a rolling pin to try to gently “de- wrinkle” your child’s outfit (while they’re wearing it).",
+  "97. When you put on your shoes, start shuffling your feet around and say, “Oh no… did someone cast a magic shuffling spell on my shoes? They won’t stop shuffling!”",
+  "98. Tuck a scarf or shirt into the waistband of your pants in the back and pretend to be astonished/concerned that you’ve grown a tail!",
+  "99. Put a hooded sweatshirt on backwards and pull the hood up over your face, exclaiming, “Hey! What’s going on? Are we having a solar eclipse? Who turned out the lights?”",
+  "100. Try to balance a hat on your bum and ask them if they think that’s a good fashion choice and if it might start a trend.",
+  "101. Write a fake name tag for yourself using a post-it note or piece of paper and tape that says “Hi, my name is _______” — insert something silly like a ridiculous nickname, made-up funny word, or something from a family inside joke. Put it on your shirt and wait for everyone to notice.",
+  "102. Clap wildly and cheer for your child when they enter the room, just because you’re excited to see them.",
+  "103. When cuddling/hugging, exclaim, “You’ll never escape from this cuddle, NEVER!” When they escape, keep your eyes closed and pretend to keep cuddling them, then open your eyes and be flabbergasted that they actually escaped!",
+  "104. Start speaking in rhymes like, “Oh no… I think I have rhyme-itis… your highness!!”",
+  "105. Use an imaginary “lasso” or “fishing pole” to try and “catch” your kiddos and draw them in for a hug! Of course, this can only be done if they think it’s fun and are eager participants.",
+  "106. Do the “raise the roof” move and chant “Whoop, whoop!!” to greet them.",
+  "107. Make up mushy-gushy names for your kids, like, “I love you, my little schnookie-pookie-wookie-doodly-ding-dong-bear!” See if they can come up with an even more ridiculous one!",
+  "108. Spontaneously start listing some of your favorite things about your child — but keep it silly and lighthearted like, “One of my favorite things about you is you admit it when you toot!” Of course, you can sprinkle in some heartfelt, non- silly things too.",
+  "109. Give them a round of applause for doing a great job on something but say, “Clapping with my hands isn’t enough. I’m so proud of you I have to clap with my FEET, too!”",
+  "110. Come up with a secret handshake with your child with silly sound effects. Challenge yourselves to remember it the next day… and the next…",
   "111. At bedtime say “Llllllllet’s get ready to SNUGGLE!” (Like “Let’s Get Ready to Rumble”)",
   "112. Turn a yawn into an opera melody.",
   "113. Pretend your own bottom is dragging you around the room backwards",
@@ -262,7 +254,7 @@
   "145. Come up with a secret code word together for the day, like “Today instead of lunch, let’s call it FarkleSnarkle!” and try to remember it when the time comes.",
   "146. Say, “Let’s try a T-Rex hug!” Then tuck in your arms like stubby dino limbs and go in for the world’s most awkward snuggle.",
   "147. Walk on your tip toes and say, “Hey, who put me in tip toe mode?? Put me back in flat foot mode at once!!”"
-];
+    ];
 
     function generatePrompt() {
       const output = document.getElementById("prompt");

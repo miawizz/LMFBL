@@ -284,45 +284,9 @@ body {
 })();
 </script>
 
-<!-- Gate the bar so it only appears after the welcome agreement button -->
-<script>
-(function(){
-  try{
-    var bar = document.getElementById('install-help');
-    if(!bar) return;
-    // Hide until accepted
-    if(localStorage.getItem('lm_ack') !== 'yes'){
-      bar.classList.add('gate-hide');
-    }
-    // When the welcome button is clicked and lm_ack is set, reveal the bar
-    window.addEventListener('DOMContentLoaded', function(){
-      var ackBtn = document.getElementById('ackBtn');
-      if(ackBtn){
-        ackBtn.addEventListener('click', function(){
-          setTimeout(function(){
-            if(localStorage.getItem('lm_ack') === 'yes'){
-              bar.classList.remove('gate-hide');
-            }
-          }, 0);
-        });
-      }
-    });
-  } catch(e){}
-})();
-</script>
 
-  <!-- One-time acknowledgement overlay. Unchanged. -->
-  <section id="ackOverlay" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
-    <div id="ackCard">
-      <h2 id="ackTitle">Thanks for supporting this work 💛</h2>
-      <p>This app is for personal use only by those who’ve purchased from <strong>Playful Heart Parenting</strong>. Please don’t share this link publicly.</p>
-      <label style="display:flex;gap:10px;align-items:center;margin-top:12px;">
-        <input id="ackCheck" type="checkbox"> <span>I understand.</span>
-      </label>
-      <button id="ackBtn" disabled>Let’s play</button>
-      <div id="ackMsg" style="margin-top:8px;color:#b24627;font-size:13px;"></div>
-    </div>
-  </section>
+
+
 
   <!-- App UI -->
 <div id="generator">
@@ -340,7 +304,9 @@ body {
     <div id="prompt">Tap the button to get a moment of play</div>
 
     <footer>
-      © 2025 Mia Wisinski, Playful Heart Parenting. This generator is for personal use only by those who have purchased <em>Little Moments for Big Laughs</em>. Please do not share this link publicly or distribute without explicit permission.
+      © 2025 Mia Wisinski • Playful Heart Parenting
+
+Thanks for supporting Playful Heart Parenting.
     </footer>
   </div>
 
@@ -361,23 +327,7 @@ body {
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    /* One-time acknowledgement logic. Unchanged. */
-    (function initAck(){
-      const overlay = document.getElementById('ackOverlay');
-      const btn = document.getElementById('ackBtn');
-      const chk = document.getElementById('ackCheck');
-      if (localStorage.getItem('lm_ack') === 'yes') {
-        overlay.style.display = 'none';
-        return;
-      }
-      chk.addEventListener('change', ()=>{ btn.disabled = !chk.checked; });
-      btn.addEventListener('click', ()=>{
-        if (!chk.checked) return;
-        localStorage.setItem('lm_ack','yes');
-        overlay.style.opacity = '0';
-        setTimeout(()=>{ overlay.style.display = 'none'; }, 350);
-      });
-    })();
+    
 
     /* Prompts. */
   

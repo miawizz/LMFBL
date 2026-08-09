@@ -29,7 +29,12 @@
       color:var(--ink);
       margin:0;
     }
-    .logo{ max-width:150px; margin-bottom:1rem; }
+   .logo{
+  width: 220px;
+  max-width: 70%;
+  height: auto;
+  margin-bottom: 1rem;
+}
     h1{ color:var(--brand); margin-bottom:.5rem; font-weight:600; font-size:1.6rem; }
     #prompt{
       margin:2rem auto; font-size:1.25rem; padding:1.5rem;
@@ -50,7 +55,6 @@
     }
     .btn-secondary:hover{ background:#e2f0f6; }
 
-    .cover{ margin-top:2rem; width:250px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,.1); }
     footer{ font-size:.9rem; color:var(--muted); margin-top:3rem; max-width:90%; margin-left:auto; margin-right:auto; }
 
     /* One-time overlay */
@@ -321,9 +325,10 @@ body {
   </section>
 
   <!-- App UI -->
-  <div id="generator">
-    <img src="https://dl.dropboxusercontent.com/scl/fi/8fk2krt7urgqbggr9auxn/PHP-LOGO-tb.png?rlkey=b0ckqoxsmquyza0wwy55k5rbe&st=mtkzjcb0&raw=1" alt="Playful Heart Parenting Logo" class="logo" />
-    <h1>Little Moments for Big Laughs: Playful Moment Generator</h1>
+<div id="generator">
+  <img src="icon-512.png" alt="Little Moments for Big Laughs" class="logo" />
+
+  <h1>Little Moments for Big Laughs: Playful Moment Generator</h1>
 
     <div class="btns">
       <button id="btnNext" onclick="generatePrompt()">Get a Moment</button>
@@ -334,7 +339,6 @@ body {
 
     <div id="prompt">Tap the button to get a moment of play</div>
 
-    <img src="https://dl.dropboxusercontent.com/scl/fi/mra3nj61mjppj7k4bep1t/LMFBL-new-cover.jpg?rlkey=oe95rmwhlx7lw830ehvjilwjd&st=jj9yb3j7&raw=1" alt="Little Moments for Big Laughs Cover" class="cover" />
     <footer>
       © 2025 Mia Wisinski, Playful Heart Parenting. This generator is for personal use only by those who have purchased <em>Little Moments for Big Laughs</em>. Please do not share this link publicly or distribute without explicit permission.
     </footer>
@@ -806,7 +810,7 @@ const prompts = [
     updateSaveButton();
     saveState(STATE.order, STATE.idx, STATE.history, STATE.hpos);
   </script>
-      </script>
+
 
     <!-- Printable starter deck button -->
     <div class="print-deck" style="margin:2rem 0; text-align:center;">

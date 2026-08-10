@@ -14,6 +14,11 @@
   <meta name="theme-color" content="#699eb0" />
 
   <style>
+
+    .circle-mode .home-button{
+  display:none !important;
+}
+    
     :root{
       --cream:#fffcf5; --ink:#333; --brand:#699eb0; --brand-2:#88b6c8;
       --card:#ffffff; --muted:#777; --dash:#699eb0;
@@ -662,7 +667,16 @@ const prompts = [
         Tap to open in your browser and download or print as needed.
       </p>
     </div>
+<script>
+(function () {
+  const isCircle =
+    new URLSearchParams(window.location.search).get("circle") === "1";
 
+  if (isCircle) {
+    document.body.classList.add("circle-mode");
+  }
+})();
+</script>
 
 </body>
 </html>

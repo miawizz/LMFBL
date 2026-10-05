@@ -3,169 +3,573 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Little Moments Generator</title>
-
+<title>Silly Moment Challenge!</title>
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <!-- PWA / Icons -->
   <link rel="manifest" href="manifest.json?v=3" />
   <link rel="apple-touch-icon" href="icon-512.png?v=3">
-  <meta name="theme-color" content="#699eb0" />
-
-  <style>
-
-    .circle-mode .home-button{
-  display:none !important;
-}
-    
-    :root{
-      --cream:#fffcf5; --ink:#333; --brand:#699eb0; --brand-2:#88b6c8;
-      --card:#ffffff; --muted:#777; --dash:#699eb0;
-      --shadow:0 6px 24px rgba(0,0,0,.08); --radius:16px;
-      --accent:#2f855a;
-    }
-    *{box-sizing:border-box}
-    body{
-      background:var(--cream);
-      font-family:'Poppins',sans-serif;
-      text-align:center;
-      padding:2rem;
-      color:var(--ink);
-      margin:0;
-    }
-   .logo{
-  width: 220px;
-  max-width: 70%;
-  height: auto;
-  margin-bottom: 1rem;
-}
-    h1{ color:var(--brand); margin-bottom:.5rem; font-weight:600; font-size:1.6rem; }
-    #prompt{
-      margin:2rem auto; font-size:1.25rem; padding:1.5rem;
-      background:rgba(255,255,255,.95); border-radius:16px;
-      border:2px dashed var(--dash); max-width:90%; min-height:120px; backdrop-filter:blur(6px);
-    }
-    .btns{ display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; }
-    button{
-      background-color:var(--brand); color:#fff; border:0; padding:.9rem 1.2rem;
-      border-radius:30px; font-size:1.05rem; cursor:pointer; margin-top:1rem; font-weight:600;
-      box-shadow:0 4px 12px rgba(0,0,0,.08);
-    }
-    button[disabled]{opacity:.5; cursor:not-allowed;}
-    button:hover{ background-color:var(--brand-2); }
-
-    .btn-secondary{
-      background:#eef6f9; color:#245565;
-    }
-    .btn-secondary:hover{ background:#e2f0f6; }
-
-    footer{ font-size:.9rem; color:var(--muted); margin-top:3rem; max-width:90%; margin-left:auto; margin-right:auto; }
-
-    /* One-time overlay */
-    #ackOverlay{
-      position:fixed; inset:0; background:rgba(255,252,245,.98);
-      display:grid; place-items:center; z-index:9999; opacity:1; transition:opacity .35s ease;
-    }
-    #ackCard{
-      width:min(560px,92%); background:#fff; border-radius:20px; box-shadow:var(--shadow);
-      padding:22px; text-align:left;
-    }
-    #ackCard h2{ margin:0 0 8px; color:#699eb0; font-size:20px; }
-    #ackCard p{ margin:6px 0; color:#5a6b75; }
-    #ackBtn{ margin-top:12px; background:#699eb0; color:#fff; border:0; padding:12px 14px; border-radius:14px; font-weight:700; cursor:pointer; }
-    #ackBtn[disabled]{ opacity:.5; cursor:not-allowed; }
-
-    /* Favorites area */
-    #favWrap{ max-width:860px; margin:2rem auto 0; text-align:left; }
-    #favHeader{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
-    #favHeader h3{ margin:0; color:#245565; font-size:1.1rem; }
-    #favList{
-      list-style:none; padding:0; margin:12px 0 0;
-      display:grid; grid-template-columns:1fr; gap:10px;
-    }
-    .favItem{
-      background:#fff; border:1px solid #d9ecf2; border-radius:14px; padding:12px 14px;
-      display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,.04);
-    }
-    .favText{ font-size:.98rem; line-height:1.35rem; }
-    .favActions{ display:flex; gap:8px; flex-shrink:0; }
-    .iconBtn{
-      border:0; background:#eef6f9; color:#245565; padding:.45rem .7rem; border-radius:10px; font-size:.9rem; cursor:pointer;
-    }
-    .iconBtn:hover{ background:#e2f0f6; }
-    .muted{ color:#6b7f88; font-size:.9rem; }
-
-    /* Tiny toast */
-    #toast{
-      position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
-      background:#245565; color:#fff; padding:10px 14px; border-radius:12px;
-      box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none;
-      transition:opacity .25s ease, transform .25s ease;
-      font-size:.95rem;
-    }
-    #toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
-
-    /* Back to Hub button */
-a.home-button {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  display: inline-block;
-  background: rgba(0, 0, 0, 0.75);
-  color: #ffffff !important;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 10002;
+<meta name="theme-color" content="#127490" />
+<style>
+:root {
+  --cream: #fff9f3;
+  --yellow: #f8b934;
+  --pink: #d94b7f;
+  --teal: #127490;
+  --coral: #e86f5c;
+  --mint: #9cc9be;
+  --peach: #f3c58f;
+  --ink: #3c3c3c;
+  --muted: #6b7f88;
 }
 
-/* Prevent overlap with top content */
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  padding-top: 3.5rem;
+  min-height: 100%;
 }
 
-  </style>
+body {
+  margin: 0;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+button,
+a {
+  font-family: inherit;
+}
+
+button {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+}
+
+
+/* MAIN LAYOUT */
+
+main,
+#favWrap,
+.print-deck,
+.resources-card,
+footer {
+  width: calc(100% - 40px);
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main {
+  padding-top: 32px;
+  text-align: center;
+}
+
+
+/* LOGO */
+
+.logo {
+  display: block;
+  width: 170px;
+  max-width: 45vw;
+  height: auto;
+  margin: 0 auto 12px;
+  border-radius: 24px;
+}
+
+
+/* TITLE */
+
+h1 {
+  margin: 0 0 22px;
+  color: var(--teal);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  line-height: 1.08;
+  font-weight: 800;
+}
+
+h2 {
+  margin: 0 0 14px;
+  color: var(--teal);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+
+
+/* GENERATOR */
+
+.generator-card {
+  width: 100%;
+  padding: 20px;
+  background: var(--mint);
+  border-radius: 28px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+}
+
+.prompt-card {
+  min-height: 190px;
+  padding: 24px 22px;
+  background: var(--pink);
+  color: var(--cream);
+  border-radius: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.prompt-label {
+  margin-bottom: 12px;
+  color: var(--yellow);
+  font-size: .88rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+#prompt {
+  max-width: 650px;
+  margin: 0;
+  font-size: clamp(1.25rem, 4vw, 1.85rem);
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+
+/* BUTTONS */
+
+.btn-main,
+.nav-buttons button,
+.btn-secondary,
+.iconBtn {
+  border-radius: 999px;
+  font-weight: 700;
+  transition:
+    transform .12s ease,
+    filter .12s ease,
+    opacity .12s ease;
+}
+
+.btn-main:hover,
+.nav-buttons button:hover,
+.btn-secondary:hover,
+.iconBtn:hover {
+  filter: brightness(1.04);
+}
+
+.btn-main:active,
+.nav-buttons button:active,
+.btn-secondary:active,
+.iconBtn:active {
+  transform: scale(.98);
+}
+
+.btn-main {
+  width: min(100%, 360px);
+  margin-top: 18px;
+  padding: 14px 24px;
+  background: var(--pink);
+  color: #fff;
+  font-size: 1rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.nav-buttons button {
+  min-width: 110px;
+  padding: 10px 18px;
+  background: var(--teal);
+  color: #fff;
+  font-size: .9rem;
+}
+
+.btn-secondary {
+  padding: 10px 18px;
+  background: #ffe9d6;
+  color: #6b3a28;
+  font-size: .9rem;
+}
+
+.generator-card > .btn-secondary {
+  margin-top: 12px;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+
+/* STANDARD WHITE CARDS */
+
+.info-card,
+#favWrap,
+.print-deck,
+.resources-card {
+  margin-top: 24px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
+}
+
+.info-card p,
+.print-deck p,
+.resources-card p {
+  max-width: 650px;
+  margin: 0 auto 12px;
+  font-size: .96rem;
+  line-height: 1.55;
+}
+
+
+/* HOW TO PLAY */
+
+.how-to-play {
+  text-align: left;
+}
+
+.how-to-play h2 {
+  text-align: center;
+}
+
+
+/* FAVORITES */
+
+#favWrap {
+  text-align: left;
+}
+
+#favHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#favHeader h3 {
+  margin: 0;
+  color: var(--teal);
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+#favHeader .btns {
+  display: flex;
+  gap: 8px;
+}
+
+#favList {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.favItem {
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.favText {
+  font-size: .95rem;
+  line-height: 1.4;
+}
+
+.favActions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  background: #ffe9d6;
+  color: #6b3a28;
+  padding: 7px 10px;
+  font-size: .82rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+
+/* PRINT + RESOURCE LINKS */
+
+.print-deck {
+  text-align: center;
+}
+
+.print-deck hr {
+  display: none;
+}
+
+.print-deck a,
+.resources-card a {
+  display: inline-block;
+  max-width: 100%;
+  padding: 12px 20px !important;
+  background: var(--teal) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  font-size: .9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.print-deck a:hover,
+.resources-card a:hover {
+  filter: brightness(1.05);
+}
+
+
+/* TOAST */
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 9999;
+  transform: translateX(-50%);
+
+  background: var(--teal);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+
+  font-size: .9rem;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+
+/* BACK TO HUB */
+
+.home-button {
+  display: inline-block;
+  margin-bottom: 22px;
+  padding: 9px 16px;
+
+  background: rgba(18, 116, 144, .09);
+  color: var(--teal);
+
+  border-radius: 999px;
+  font-size: .88rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+
+/* FOOTER */
+
+footer {
+  margin-top: 28px;
+  margin-bottom: 40px;
+  color: var(--muted);
+  text-align: center;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+
+/* CIRCLE MODE */
+
+.circle-mode .home-button {
+  display: none !important;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  main,
+  #favWrap,
+  .print-deck,
+  .resources-card,
+  footer {
+    width: calc(100% - 28px);
+  }
+
+  main {
+    padding-top: 24px;
+  }
+
+  .logo {
+    width: 150px;
+  }
+
+  h1 {
+    margin-bottom: 18px;
+  }
+
+  .generator-card {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .prompt-card {
+    min-height: 180px;
+    padding: 22px 16px;
+    border-radius: 17px;
+  }
+
+  .nav-buttons {
+    width: 100%;
+  }
+
+  .nav-buttons button {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .info-card,
+  #favWrap,
+  .print-deck,
+  .resources-card {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  #favHeader {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  #favHeader .btns {
+    justify-content: center;
+  }
+
+  .favItem {
+    flex-direction: column;
+  }
+
+  .favActions {
+    width: 100%;
+  }
+
+  .iconBtn {
+    flex: 1;
+  }
+}
+</style>
 </head>
 <body>
+
+
+
+
+
+
+
+
+
+
+
+<!-- App UI -->
+<main>
+
   <a href="https://miawizz.github.io/php-app-hub/" class="home-button">
-  ← Back to Hub
-</a>
+    Back to Hub
+  </a>
 
+  <img
+    src="silly-moment-challenge-graphic.png"
+    alt="Silly Moment Challenge logo"
+    class="logo"
+  />
 
+  <h1>SILLY MOMENT CHALLENGE!</h1>
 
+  <section class="generator-card">
 
+    <div class="prompt-card">
+      <div class="prompt-label">YOUR SILLY CHALLENGE:</div>
 
-
-
-
-
-
-  <!-- App UI -->
-<div id="generator">
-  <img src="icon-512.png" alt="Little Moments for Big Laughs" class="logo" />
-
-  <h1>Little Moments for Big Laughs: Playful Moment Generator</h1>
-
-    <div class="btns">
-      <button id="btnNext" onclick="generatePrompt()">Get a Moment</button>
-      <button id="btnBack" onclick="goBack()">Back</button>
-      <button id="btnFwd" onclick="goForward()">Forward</button>
-      <button id="btnSave" class="btn-secondary" onclick="saveCurrent()">Save to Favorites</button>
+      <div id="prompt">
+        Tap the button to get your first silly challenge!
+      </div>
     </div>
 
-    <div id="prompt">Tap the button to get a moment of play</div>
+    <button
+      id="btnNext"
+      class="btn-main"
+      onclick="generatePrompt()"
+    >
+      Give Me a Challenge!
+    </button>
 
-    <footer>
-      © 2025 Mia Wisinski • Playful Heart Parenting
+    <div class="nav-buttons">
+      <button id="btnBack" onclick="goBack()">Back</button>
+      <button id="btnFwd" onclick="goForward()">Forward</button>
+    </div>
 
-Thanks for supporting Playful Heart Parenting.
-    </footer>
-  </div>
+    <button
+      id="btnSave"
+      class="btn-secondary"
+      onclick="saveCurrent()"
+    >
+      Save to Favorites
+    </button>
+
+  </section>
+
+
+  <section class="info-card how-to-play">
+
+    <h2>HOW TO PLAY</h2>
+
+    <p>
+      Tap the button for a simple silly idea to try with your kiddo.
+    </p>
+
+    <p>
+      You might get a smile, a giggle, or an invitation to keep playing.
+      You might get an eye roll or a “Stop!” That’s okay.
+    </p>
+
+    <p>
+      <strong>
+        The goal isn’t a certain reaction. It’s showing your kids that
+        it’s safe to be silly and building a family culture of play,
+        one little moment at a time.
+      </strong>
+    </p>
+
+  </section>
+
+</main>
 
   <!-- Favorites list -->
   <section id="favWrap" aria-labelledby="favTitle">
@@ -640,8 +1044,8 @@ const prompts = [
     </div>
 
       <!-- Little Moments full PDFs -->
-    <div style="margin:1.5rem 0 3rem; text-align:center;">
-      <p style="font-family:Poppins, sans-serif; font-size:1rem; color:#18323b; margin-bottom:.75rem;">
+<div class="resources-card" style="text-align:center;">
+  <p style="font-family:Poppins, sans-serif; font-size:1rem; color:#18323b; margin-bottom:.75rem;">
         The eBook has 110 ideas as well as tips for getting more comfortable being silly!
       </p>
 
